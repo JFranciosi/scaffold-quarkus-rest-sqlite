@@ -4,15 +4,22 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Market {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+    @Column(nullable = false)
     private String title;
     private String description;
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     private String square;
+    @Column(nullable = false)
     private Theme theme;
+    @Column(nullable = false)
     private int totalDesks;
+    @Column(nullable = false)
     private int assignedDesks;
 
     public Long getId() {

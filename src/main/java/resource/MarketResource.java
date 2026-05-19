@@ -23,12 +23,12 @@ public class MarketResource {
     }
 
     @GET
-    public PageResponse<Market> findAll
-            (
+    public PageResponse<Market> findAll(
             @QueryParam("theme") Theme theme,
             @QueryParam("search") String search,
             @DefaultValue("0") @QueryParam("page") int page,
-            @DefaultValue("6") @QueryParam("size") int size) {
+            @DefaultValue("6") @QueryParam("size") int size
+    ) {
         return marketRepository.findFiltered(theme, search, page, size);
     }
 
