@@ -28,7 +28,7 @@ public class MarketResource {
             @QueryParam("theme") Theme theme,
             @QueryParam("search") String search,
             @DefaultValue("0") @QueryParam("page") int page,
-            @DefaultValue("3") @QueryParam("size") int size) {
+            @DefaultValue("6") @QueryParam("size") int size) {
         return marketRepository.findFiltered(theme, search, page, size);
     }
 
