@@ -3,15 +3,17 @@ package repository;
 import entity.Market;
 import entity.Theme;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.PageResponse;
 
 @ApplicationScoped
 public class MarketRepository implements PanacheRepositoryBase<Market, Long> {
 
-    public List<Market> findFiltered(Theme theme, String search) {
+    public PageResponse<Market> findFiltered(Theme theme, String search, int page, int size) {
         StringBuilder query = new StringBuilder("1=1");
         Map<String, Object> params = new HashMap<>();
 
@@ -25,6 +27,14 @@ public class MarketRepository implements PanacheRepositoryBase<Market, Long> {
             params.put("search", "%" + search + "%");
         }
 
-        return list(query.toString(), params);
+        int safeSize = Math.max(size, 1);
+        int safePage = Math.max(page, 0);
+
+        var panacheQuery = find(query.toString(), params);
+        long totalElements = panacheQuery.count();
+        List<Market> content = panacheQuery.page(Page.of(safePage, safeSize)).list();
+        int totalPages = (int) Math.ceil((double) totalElements / safeSize);
+
+        return new PageResponse<>(content, totalElements, totalPages, safePage, safeSize);
     }
 }

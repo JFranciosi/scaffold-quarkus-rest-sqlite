@@ -8,9 +8,8 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import model.PageResponse;
 import repository.MarketRepository;
-
-import java.util.List;
 
 @Path("/markets")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,8 +23,13 @@ public class MarketResource {
     }
 
     @GET
-    public List<Market> findAll(@QueryParam("theme") Theme theme, @QueryParam("search") String search) {
-        return marketRepository.findFiltered(theme, search);
+    public PageResponse<Market> findAll
+            (
+            @QueryParam("theme") Theme theme,
+            @QueryParam("search") String search,
+            @DefaultValue("0") @QueryParam("page") int page,
+            @DefaultValue("3") @QueryParam("size") int size) {
+        return marketRepository.findFiltered(theme, search, page, size);
     }
 
     @GET
