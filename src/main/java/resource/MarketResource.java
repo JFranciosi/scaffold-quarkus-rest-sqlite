@@ -10,6 +10,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import model.PageResponse;
 import repository.MarketRepository;
+import java.time.LocalDateTime;
+
+import static io.quarkus.hibernate.orm.panache.PanacheEntityBase.persist;
 
 @Path("/markets")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,7 +46,10 @@ public class MarketResource {
     @POST
     @Transactional
     public Response create(Market market) {
-        marketRepository.persist(market);
+        if (market.getCreatedAt() != null && !market.getCreatedAt().isAfter(LocalDateTime.now())) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("La data deve essere futura").build();
+        }
+        persist(market);
         return Response.status(Response.Status.CREATED).entity(market).build();
     }
 
