@@ -77,7 +77,7 @@ public class MarketResource {
     }
 
     @POST
-    @Path("/{id}/BookDesks")
+    @Path("/{id}/book-desks")
     @Transactional
     public Response bookDesk(@PathParam("id") Long id) {
         Market market = marketRepository.findById(id);
